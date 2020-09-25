@@ -1,5 +1,8 @@
 import app from './app.js';
-
+import HomeController from "../controllers/HomeController.js";
+import AboutController from "../controllers/AboutController.js";
+import SearchController from "../controllers/SearchController.js";
+import LoginController from "../controllers/LoginController.js";
 import config from './config.js';
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -7,8 +10,31 @@ import config from './config.js';
 // --------------------------------------------------------------------------------------------------------------------
 
 function initializeRouter() {
-    // Instancier ici le Vanilla Router dans l'objet "app.mvc.router"
-    // ...
+        let router = new Router({
+            mode: 'hash',
+            page404: function (path) {
+                console.log('"/' + path + '" Page not found');
+            }
+        });
+         
+        router.add('', function () {
+            app.mvc.dispatchUrl(new HomeController())
+        });
+    
+        router.add('search', function () {
+            app.mvc.dispatchUrl(new SearchController())
+        });
+    
+        router.add('about', function () {
+            app.mvc.dispatchUrl(new AboutController())
+        });
+    
+        router.add('login', function () {
+            app.mvc.dispatchUrl(new LoginController())
+        });    
+
+        router.addUriListener();
+        router.navigateTo("");
 }
 
 
@@ -19,4 +45,6 @@ function initializeRouter() {
 document.addEventListener('DOMContentLoaded', function () {
     // Initialisation du routeur.
     initializeRouter();
+
+    firebase.initializeApp(config.firebase);
 });
